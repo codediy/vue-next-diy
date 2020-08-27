@@ -1,16 +1,17 @@
 const onRe = /^on[^a-z]/;
 const isOn = key => onRe.test(key);
 
-export function patchProps(el, key, value) {
+export function hostPatchProps(el, key, prev, next) {
     if (isOn(key)) {
         /*onXX等事件*/
         const name = key.slice(2).toLowerCase();
-        el.addEventListener(name, value)
+        prev && el.removeEventListener(name, prev);
+        el.addEventListener(name, next)
     } else {
-        if (value === null) {
+        if (next === null) {
             el.removeAttribute(key)
         } else {
-            el.setAttribute(key, value)
+            el.setAttribute(key, next)
         }
     }
 }

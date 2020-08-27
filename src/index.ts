@@ -1,4 +1,4 @@
-import {patchProps, nodeOps} from "./runtime-dom";
+import {hostPatchProps, nodeOps} from "./runtime-dom";
 import {effect} from "./reactivity"
 
 
@@ -10,13 +10,16 @@ let rootContainer;
  * @param container
  */
 export function render(vNode, container) {
-    /*setState检查是否已渲染过*/
-    rootContainer = container;
-    if (rootContainer.childNodes[0]) {
-        nodeOps.remove(rootContainer.childNodes[0]);
-    }
+
+    let oldVNode = container._vnode
+        ? container._vnode
+        : null;
+
     /*挂载实现*/
-    patch(null, vNode, container);
+    patch(oldVNode, vNode, container);
+    
+    /*缓存已挂载的VNode*/
+    container._vnode = vNode;
 }
 
 /**
@@ -29,7 +32,7 @@ function patch(n1, n2, container) {
     console.log("n2", n2.type, typeof n2.type);
     if (typeof  n2.type === "string") {
         /*原生节点div*/
-        mountElement(n2, container);
+        processElement(n1, n2, container);
     } else if (typeof n2.type === "object") {
         /*Component*/
         mountComponent(n2, container);
@@ -67,6 +70,21 @@ function mountComponent(vnode, container) {
 }
 
 /**
+ * 带有缓存检查的mountElement
+ * @param n1
+ * @param n2
+ * @param container
+ */
+function processElement(n1, n2, container) {
+    if (n1 === null) {
+        mountElement(n2, container);
+    } else {
+        patchElement(n1, n2, container);
+    }
+
+}
+
+/**
  * 挂载原生dom
  * @param vNode
  * @param container
@@ -76,10 +94,13 @@ function mountElement(vNode, container) {
 
     /*1 type处理*/
     let el = nodeOps.createElement(type);
+    /*缓存el到VNode*/
+    vNode.el = el;
+
     /*2 props处理*/
     if (props) {
         for (const key in props) {
-            patchProps(el, key, props[key]);
+            hostPatchProps(el, key, null, props[key]);
         }
     }
 
@@ -90,7 +111,46 @@ function mountElement(vNode, container) {
         mountChildren(children, el);
     }
 
+
     nodeOps.insert(el, container, null);
+}
+
+/**
+ * 更新container的元原生元素
+ * @param n1
+ * @param n2
+ * @param container
+ */
+function patchElement(n1, n2, container) {
+    console.log("el", n1);
+
+    n2.el    = n1.el;
+    const el = n1.el;
+
+
+    const oldProps = n1.props;
+    const newProps = n2.props;
+
+    /*比较props*/
+    patchProps(el, n2, oldProps, newProps);
+
+}
+
+function patchProps(el, n2, oldProps, newProps) {
+    if (oldProps !== newProps) {
+        for (const key in newProps) {
+            const next = newProps[key];
+            const prev = oldProps[key];
+            if (next !== prev) {
+                hostPatchProps(el, key, prev, next);
+            }
+        }
+        for (const key in oldProps) {
+            if (!(key in newProps)) {
+                hostPatchProps(el, key, oldProps[key], null);
+            }
+        }
+    }
 }
 
 function mountChildren(children, container) {

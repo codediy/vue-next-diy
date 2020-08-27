@@ -58,6 +58,16 @@
 - Component的setUp()返回的render()可以生成虚拟dom树
  
 
+## 4 patchProps
+[propsPatch](https://github.com/codediy/vue-next-diy/tree/props-patch)
+
+### patchProps
+- 前面的1.3patchProps实际是renderProps.对props的首次渲染
+- 这里的patchProps是props更新后的重新比较渲染
+- 实现获取container->oldVNode->oldEl->oldProps,并与newProps比较
+
+
 ## 参考
-[vue-next-write](https://github.com/ruige24601/vue-next-write.git)
-[vue-next-write视频](https://www.bilibili.com/video/BV1nT4y1779z)
+- [vue-next-write](https://github.com/ruige24601/vue-next-write.git)
+
+- [vue-next-write视频](https://www.bilibili.com/video/BV1nT4y1779z)
