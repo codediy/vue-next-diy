@@ -4,6 +4,10 @@
  * @param container
  */
 export function render(vNode, container) {
+    /*setState检查是否已渲染过*/
+    if (container.childNodes[0]) {
+        nodeOps.remove(container.childNodes[0]);
+    }
     mountElement(vNode, container);
 }
 
@@ -23,10 +27,10 @@ function mountElement(vNode, container) {
     if (typeof  children === "string") {
         nodeOps.setElementText(el, children);
     } else if (Array.isArray(children)) {
-        mountChildren(children, container);
+        mountChildren(children, el);
     }
 
-    nodeOps.insert(el, container);
+    nodeOps.insert(el, container, null);
 }
 
 const onRe = /^on[^a-z]/;
@@ -36,12 +40,12 @@ function patchProps(el, key, value) {
     if (isOn(key)) {
         /*onXX等事件*/
         const name = key.slice(2).toLowerCase();
-        el.addEventListener(name,value)
-    }else{
-        if(value === null){
+        el.addEventListener(name, value)
+    } else {
+        if (value === null) {
             el.removeAttribute(key)
-        }else{
-            el.setAttribute(key,value)
+        } else {
+            el.setAttribute(key, value)
         }
     }
 }
@@ -54,7 +58,7 @@ function mountChildren(children, container) {
 }
 
 const nodeOps = {
-    insert: (child, parent, anchor = null) => {
+    insert: (child, parent, anchor) => {
         if (anchor) {
             parent.insert(child, anchor);
         } else {

@@ -17,6 +17,16 @@
 ### props的处理
 - 变量props进行相应处理
 
+## 2 setState
+[set-state分支](https://github.com/codediy/vue-next-diy/tree/set-state)
+
+### setState的处理
+- 重新生成Vnode
+- 渲染新的Vnode,删除旧的已渲染，重新挂载
+
+### 修复问题
+- moutn-children分支下的mountChildren参数错误
+
 ## 参考
 [vue-next-write](https://github.com/ruige24601/vue-next-write.git)
 [vue-next-write视频](https://www.bilibili.com/video/BV1nT4y1779z)
