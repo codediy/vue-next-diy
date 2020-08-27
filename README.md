@@ -8,10 +8,14 @@
 
 ## 1.2 mountChildren
 [mount-children分支](https://github.com/codediy/vue-next-diy/tree/mount-children)
-
 ### 挂载子节点
 - 递归挂载子节点children
 
+## 1.3 patchProps
+[patch-props分支](https://github.com/codediy/vue-next-diy/tree/patch-props)
+
+### props的处理
+- 变量props进行相应处理
 
 ## 参考
 [vue-next-write](https://github.com/ruige24601/vue-next-write.git)
