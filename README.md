@@ -1,7 +1,16 @@
 # Vue-next简单实现
 
-## 框架环境
+## 0 框架环境
 [hello分支](https://github.com/codediy/vue-next-diy/tree/hello)
+
+## 1 renderDiv
+[render-div分支](https://github.com/codediy/vue-next-diy/tree/render-div)
+
+## 1.2 mountChildren
+[mount-children分支](https://github.com/codediy/vue-next-diy/tree/mount-children)
+
+### 挂载子节点
+- 递归挂载子节点children
 
 
 ## 参考

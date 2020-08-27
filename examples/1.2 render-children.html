@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue-next-diy</title>
+</head>
+<body>
+<div id="root"></div>
+<script src="../dist/vue-next-write.global.js"></script>
+<script>
+    /*导入render*/
+    const {render} = Vue;
+    const state = {
+        name: "vue-next-diy"
+    };
+
+    /*待渲染VNode*/
+    const VNode = {
+        type: "div",
+        props: null,
+        children: [
+            {
+                type: "div",
+                props: null,
+                children: "hello"
+            },
+            {
+                type: "div",
+                props: null,
+                children: state.name
+            },
+        ]
+    };
+
+    /*root自动定位到id='root'?*/
+    render(VNode, root);
+</script>
+</body>
+</html>
