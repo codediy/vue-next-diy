@@ -49,6 +49,14 @@
 - track注册effect到targetMap
 - trigger查找targetMap中的effect并执行
 
+## 3 Component
+[component分支](https://github.com/codediy/vue-next-diy/tree/component)
+
+### component实现
+- render()中调用patch()
+- patch()中根据type类型进行不同的处理
+- Component的setUp()返回的render()可以生成虚拟dom树
+ 
 
 ## 参考
 [vue-next-write](https://github.com/ruige24601/vue-next-write.git)
