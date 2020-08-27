@@ -40,6 +40,16 @@
 - effect注册副作用函数
 - reactive的代理中数据变化，再次调用副作用函数 
 
+
+## 2.4 track-trigger
+[track-trigger分支](https://github.com/codediy/vue-next-diy/tree/track-trigger)
+
+
+### track-trigger
+- track注册effect到targetMap
+- trigger查找targetMap中的effect并执行
+
+
 ## 参考
 [vue-next-write](https://github.com/ruige24601/vue-next-write.git)
 [vue-next-write视频](https://www.bilibili.com/video/BV1nT4y1779z)
