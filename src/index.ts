@@ -81,3 +81,30 @@ const nodeOps = {
 
 };
 
+
+let activeEffect;
+
+/**
+ * 注册effect副作用回调
+ * @param fn
+ */
+export function effect(fn) {
+    activeEffect = fn;
+    fn();
+    // activeEffect = null;
+}
+
+/**
+ * 数据响应
+ * @param target
+ * @returns {any}
+ */
+export function reactive(target) {
+    return new Proxy(target, {
+        set(target, key, value, receiver) {
+            let res = Reflect.set(target, key, value, receiver);
+            activeEffect && activeEffect();
+            return res;
+        },
+    })
+}

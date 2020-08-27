@@ -27,6 +27,19 @@
 ### 修复问题
 - moutn-children分支下的mountChildren参数错误
 
+## 2.2 proxy
+[proxy分支](https://github.com/codediy/vue-next-diy/tree/proxy)
+
+### proxy实现
+- proxy的set中重新渲染
+
+## 2.3 effect
+[effect分支](https://github.com/codediy/vue-next-diy/tree/effect)
+
+### effect实现
+- effect注册副作用函数
+- reactive的代理中数据变化，再次调用副作用函数 
+
 ## 参考
 [vue-next-write](https://github.com/ruige24601/vue-next-write.git)
 [vue-next-write视频](https://www.bilibili.com/video/BV1nT4y1779z)
