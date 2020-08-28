@@ -10,6 +10,7 @@ let rootContainer;
  * @param container
  */
 export function render(vNode, container) {
+    rootContainer = container;
 
     let oldVNode = container._vnode
         ? container._vnode
@@ -233,9 +234,62 @@ function mountChildren(children, container) {
  * @param container
  */
 function patchKeyedChildren(c1, c2, container) {
+    let i;
+    let e1 = c1.length - 1;
+    let e2 = c2.length - 1;
+
+    /*新的key->index*/
+    const keyToNewIndexMap = new Map();
+    for (i = 0; i <= e2; i++) {
+        const nextChild = c2[i];
+        keyToNewIndexMap.set(nextChild.props.key, i);
+    }
+    const newIndexToOldIndexMap = new Array(e2 + 1);
+
+    /*newIndex->oldIndex(-1) 默认旧的Index不存在*/
+    for (i = 0; i <= e2; i++) {
+        newIndexToOldIndexMap[i] = -1;
+    }
+
+    for (i = 0; i <= e1; i++) {
+        const prevChild = c1[i];
+        let newIndex    = keyToNewIndexMap.get(prevChild.props.key);
+        if (newIndex === undefined) {
+            /*删除旧的*/
+            unMount(prevChild);
+        } else {
+            /*newIndex->oldIndex*/
+            newIndexToOldIndexMap[newIndex] = i;
+            /*更新旧的,但不移动位置*/
+            patch(prevChild, c2[newIndex], container);
+        }
+    }
+
+    for (i = e2; i >= 0; i--) {
+        const newChild = c2[i];
+        /*是否最后一个*/
+        const anchor = i + 1 <= e2 ? c2[i + 1].el : null;
+
+        if (newIndexToOldIndexMap[i] === -1) {
+            /*新增*/
+            patch(null, newChild, container);
+        } else {
+            /*说明key对应的旧index存在，需要更新移动位置*/
+            move(newChild, container, anchor);
+        }
+    }
 
 }
 
+/**
+ * 移动vNode到anchor前面
+ * @param vNode
+ * @param container
+ * @param anchor
+ */
+function move(vNode, container, anchor) {
+    nodeOps.insert(vNode.el, container, anchor);
+}
 
 export * from "./runtime-dom";
 export * from "./reactivity";

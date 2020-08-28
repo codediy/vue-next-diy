@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue-next-diy</title>
+</head>
+<body>
+<div id="root"></div>
+<script src="../dist/vue-next-write.global.js"></script>
+<script>
+    /*导入render*/
+    /*
+    * effect 注册带有副作用函数
+    * */
+    const {render, effect, reactive} = Vue;
+
+    let state = reactive({
+        name: "hello vue-next-diy",
+        count: 0,
+        toggle: true
+    });
+
+    function handleClick() {
+        state.toggle = !state.toggle
+    }
+
+    const arr1 = [
+        {type: "div", props: {key: "a"}, children: "child a"},
+        {type: "div", props: {key: "b"}, children: "child b"},
+        {type: "div", props: {key: "c"}, children: "child c"},
+    ];
+
+    const arr2 = [
+        /*删除b*/
+        // {type: "div", props: {key: "a"}, children: "child a"},
+        // {type: "div", props: {key: "c"}, children: "child c"},
+
+        /*更新b*/
+        // {type: "div", props: {key: "a"}, children: "child a"},
+        // {type: "div", props: {key: "b"}, children: "child b new"},
+        // {type: "div", props: {key: "c"}, children: "child c"},
+
+        /*新增d*/
+        // {type: "div", props: {key: "a"}, children: "child a"},
+        // {type: "div", props: {key: "b"}, children: "child b"},
+        // {type: "div", props: {key: "c"}, children: "child c"},
+        // {type: "div", props: {key: "d"}, children: "child d"},
+
+        /*移动c*/
+        {type: "div", props: {key: "a"}, children: "child a"},
+        {type: "div", props: {key: "c"}, children: "child c"},
+        {type: "div", props: {key: "b"}, children: "child b"},
+    ];
+
+    effect(() => {
+        const VNode = {
+            type: "div",
+            props: {
+                onClick: handleClick
+            },
+            children: state.toggle
+                ? arr1
+                : arr2
+        };
+        /*root自动定位到id='root'?*/
+        render(VNode, root);
+    })
+
+</script>
+</body>
+</html>

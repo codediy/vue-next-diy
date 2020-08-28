@@ -76,6 +76,17 @@
     - array->string,string->string,先删除旧的array,然后挂载新的string
     - string->array 先删除旧的string,再挂载新的array
 
+## 4.2 tow-array
+[twoArray分支](https://github.com/codediy/vue-next-diy/tree/tow-array)
+
+### two-array
+- patchChildren最后一种array->array
+- 这里使用Key作为子节点唯一
+- 分为四种情况，
+    - 删除旧key子节点
+    - 更新旧key子节点,位置不变
+    - 新增key子节点
+    - 更新旧key子节点,移动位置
 
 ## 参考
 - [vue-next-write](https://github.com/ruige24601/vue-next-write.git)

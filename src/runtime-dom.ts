@@ -19,7 +19,7 @@ export function hostPatchProps(el, key, prev, next) {
 export const nodeOps = {
     insert: (child, parent, anchor) => {
         if (anchor) {
-            parent.insert(child, anchor);
+            parent.insertBefore(child, anchor);
         } else {
             parent.appendChild(child);
         }
