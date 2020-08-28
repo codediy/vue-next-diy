@@ -228,31 +228,29 @@ function mountChildren(children, container) {
 }
 
 /**
- *
- * @param c1
- * @param c2
+ * 带key的更新children
+ * @param oldChildren
+ * @param newChildren
  * @param container
  */
-function patchKeyedChildren(c1, c2, container) {
+function patchKeyedChildren(oldChildren, newChildren, container) {
     let i;
-    let e1 = c1.length - 1;
-    let e2 = c2.length - 1;
-
-    /*新的key->index*/
+    /*新的key->newIndex*/
     const keyToNewIndexMap = new Map();
-    for (i = 0; i <= e2; i++) {
-        const nextChild = c2[i];
+    for (i = 0; i < newChildren.length; i++) {
+        const nextChild = newChildren[i];
         keyToNewIndexMap.set(nextChild.props.key, i);
     }
-    const newIndexToOldIndexMap = new Array(e2 + 1);
+    const newIndexToOldIndexMap = new Array(newChildren.length);
 
     /*newIndex->oldIndex(-1) 默认旧的Index不存在*/
-    for (i = 0; i <= e2; i++) {
+    for (i = 0; i < newChildren.length; i++) {
         newIndexToOldIndexMap[i] = -1;
     }
 
-    for (i = 0; i <= e1; i++) {
-        const prevChild = c1[i];
+    /*遍历oldChildren*/
+    for (i = 0; i < oldChildren.length; i++) {
+        const prevChild = oldChildren[i];
         let newIndex    = keyToNewIndexMap.get(prevChild.props.key);
         if (newIndex === undefined) {
             /*删除旧的*/
@@ -261,20 +259,24 @@ function patchKeyedChildren(c1, c2, container) {
             /*newIndex->oldIndex*/
             newIndexToOldIndexMap[newIndex] = i;
             /*更新旧的,但不移动位置*/
-            patch(prevChild, c2[newIndex], container);
+            patch(prevChild, newChildren[newIndex], container);
         }
     }
 
-    for (i = e2; i >= 0; i--) {
-        const newChild = c2[i];
+    /*倒序遍历新的子节点*/
+    for (i = newChildren.length - 1; i >= 0; i--) {
+        const newChild = newChildren[i];
+
         /*是否最后一个*/
-        const anchor = i + 1 <= e2 ? c2[i + 1].el : null;
+        const anchor = i + 1 <= newChildren.length - 1
+            ? newChildren[i + 1]["el"]
+            : null;
 
         if (newIndexToOldIndexMap[i] === -1) {
-            /*新增*/
+            /*旧的Key不存在，新增挂载*/
             patch(null, newChild, container);
         } else {
-            /*说明key对应的旧index存在，需要更新移动位置*/
+            /*旧的Key存在，移动位置*/
             move(newChild, container, anchor);
         }
     }
