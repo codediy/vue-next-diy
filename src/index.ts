@@ -267,15 +267,14 @@ function patchKeyedChildren(oldChildren, newChildren, container) {
     for (i = newChildren.length - 1; i >= 0; i--) {
         const newChild = newChildren[i];
 
-        /*是否最后一个*/
-        const anchor = i + 1 <= newChildren.length - 1
-            ? newChildren[i + 1]["el"]
-            : null;
-
         if (newIndexToOldIndexMap[i] === -1) {
             /*旧的Key不存在，新增挂载*/
             patch(null, newChild, container);
         } else {
+            /*是否最后一个*/
+            const anchor = i + 1 <= newChildren.length - 1
+                ? newChildren[i + 1]["el"]
+                : null;
             /*旧的Key存在，移动位置*/
             move(newChild, container, anchor);
         }
