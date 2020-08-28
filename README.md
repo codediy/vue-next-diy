@@ -1,5 +1,29 @@
 # Vue-next简单实现
 
+## TOC
+- render-div        
+    - 渲染文本div
+- render-children   
+    - 渲染带有子节点的div
+- render-props      
+    - 渲染带有属性的div
+
+- set-state         
+    - 简单更新,全部重新渲染
+- proxy             
+    - effect的set时触发渲染
+- track-trigger     
+    - effect下的get/track和set/trigger
+
+- component         
+    - setup返回render结果
+- diff-props        
+    - container->oldVNode->oldEl->oldPros与newProps比较
+- diff-children     
+    - array->string,string->string,string->array,array->array
+- diff-array
+    - patchKeyedChildren最长上升子序列 
+
 ## 0 框架环境
 [hello分支](https://github.com/codediy/vue-next-diy/tree/hello)
 
