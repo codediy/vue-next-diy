@@ -59,12 +59,22 @@
  
 
 ## 4 patchProps
-[propsPatch](https://github.com/codediy/vue-next-diy/tree/props-patch)
+[propsPatch分支](https://github.com/codediy/vue-next-diy/tree/props-patch)
 
 ### patchProps
 - 前面的1.3patchProps实际是renderProps.对props的首次渲染
 - 这里的patchProps是props更新后的重新比较渲染
 - 实现获取container->oldVNode->oldEl->oldProps,并与newProps比较
+
+## 4.1 patchChildren
+[samplePatchChildren分支](https://github.com/codediy/vue-next-diy/tree/sample-patch-children)
+
+### patchChildren
+- 子节点的比较分为四种
+- array->string,string->string,string->array,array->array
+- 这里只是简单前3种
+    - array->string,string->string,先删除旧的array,然后挂载新的string
+    - string->array 先删除旧的string,再挂载新的array
 
 
 ## 参考

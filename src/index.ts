@@ -17,7 +17,7 @@ export function render(vNode, container) {
 
     /*挂载实现*/
     patch(oldVNode, vNode, container);
-    
+
     /*缓存已挂载的VNode*/
     container._vnode = vNode;
 }
@@ -127,15 +127,22 @@ function patchElement(n1, n2, container) {
     n2.el    = n1.el;
     const el = n1.el;
 
-
     const oldProps = n1.props;
     const newProps = n2.props;
 
     /*比较props*/
     patchProps(el, n2, oldProps, newProps);
-
+    /*比较children*/
+    patchChildren(n1, n2, el)
 }
 
+/**
+ * props修改
+ * @param el
+ * @param n2
+ * @param oldProps
+ * @param newProps
+ */
 function patchProps(el, n2, oldProps, newProps) {
     if (oldProps !== newProps) {
         for (const key in newProps) {
@@ -153,11 +160,80 @@ function patchProps(el, n2, oldProps, newProps) {
     }
 }
 
+
+/**
+ * array->string
+ * string->string
+ *
+ * string->array
+ * array->array
+ * @param n1
+ * @param n2
+ * @param container
+ */
+function patchChildren(n1, n2, container) {
+    const c1 = n1 && n1.children;
+    const c2 = n2.children
+
+    if (typeof  c2 === "string") {
+        /*array->string 先删除旧的array,再挂载text*/
+        if (Array.isArray(c1)) {
+            unMountChildren(c1);
+        }
+        /*string -> string*/
+        if (c2 !== c1) {
+            nodeOps.setElementText(container, c2);
+        }
+    } else {
+        /*string -> array 先删除旧的文本，再挂载新的array */
+        if (typeof  c1 === "string") {
+            nodeOps.setElementText(container, "");
+            mountChildren(c2, container);
+        }
+        /*array->array*/
+        patchKeyedChildren(c1, c2, container);
+    }
+}
+
+/**
+ *
+ * @param children
+ */
+function unMountChildren(children) {
+    for (let i = 0; i < children.length; i++) {
+        unMount(children[i]);
+    }
+}
+
+/**
+ *
+ * @param child
+ */
+function unMount(child) {
+    console.log("unMount", child);
+    nodeOps.remove(child.el)
+}
+
+/**
+ *
+ * @param children
+ * @param container
+ */
 function mountChildren(children, container) {
     for (let i = 0; i < children.length; i++) {
         const child = children[i];
         patch(null, child, container);
     }
+}
+
+/**
+ *
+ * @param c1
+ * @param c2
+ * @param container
+ */
+function patchKeyedChildren(c1, c2, container) {
+
 }
 
 
